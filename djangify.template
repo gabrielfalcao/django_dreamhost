@@ -56,6 +56,7 @@ apply_template () {
         replace_tag 'MY_ETC' $MY_ETC $fullpath;
         replace_tag 'HTACCESS_TEMPLATE_FILE' $HTACCESS_TEMPLATE_FILE $fullpath;
         replace_tag 'DISPATCH_TEMPLATE_FILE' $DISPATCH_TEMPLATE_FILE $fullpath;
+        replace_tag 'PROJECT_NAME' $PROJECT_NAME $fullpath;
     fi;
 }
 
