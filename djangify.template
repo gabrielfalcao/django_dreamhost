@@ -1,0 +1,96 @@
+#!/bin/bash
+# Copyright (C) 2008 Gabriel Falcão <gabriel@nacaolivre.org>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the
+# Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+
+# basic functions
+regex_it () {
+ RESULT=`echo "$1" | sed -s "s/$2/$3/g"`;
+ echo $RESULT;
+}
+
+append_slash () {
+    echo `regex_it "$1" '\([^/]\)$' '\1\/'`;
+}
+
+replace_tag () {
+    TAG=$1;
+    VALUE=$2;
+    FILENAME=$3;
+    echo " [template processing] Replacing file $FILENAME with $VALUE where is $TAG ...";
+    sed -i 's/[{][@]'$TAG'[@][}]/'$VALUE'/g' $FILENAME;
+}
+
+PROJECT_NAME="$1";
+MY_PROJECTS='{@MY_PROJECTS@}';
+MY_TEMPLATES='{@MY_TEMPLATES@}';
+MY_ROOT='{@MY_ROOT@}';
+MY_PREFIX='{@MY_PREFIX@}';
+MY_ETC='{@MY_ETC@}';
+MY_PYTHON='{@MY_PYTHON@}';
+DISPATCH_TEMPLATE_FILE='{@DISPATCH_TEMPLATE_FILE@}';
+HTACCESS_TEMPLATE_FILE='{@HTACCESS_TEMPLATE_FILE@}';
+PROJECTS_BASE_PATH='{@PROJECTS_BASE_PATH@}';
+
+apply_template () {
+    fullpath=$1;
+    replace_tag 'PROJECTS_BASE_PATH' $PROJECTS_BASE_PATH $fullpath;
+    replace_tag 'MY_PYTHON' $MY_PYTHON $fullpath;
+    replace_tag 'MY_PROJECTS' $MY_PROJECTS $fullpath;
+    replace_tag 'MY_TEMPLATES' $MY_TEMPLATES $fullpath;
+    replace_tag 'MY_ROOT' $MY_ROOT $fullpath;
+    replace_tag 'MY_PREFIX' $MY_PREFIX $fullpath;
+    replace_tag 'MY_ETC' $MY_ETC $fullpath;
+    replace_tag 'HTACCESS_TEMPLATE_FILE' $HTACCESS_TEMPLATE_FILE $fullpath;
+    replace_tag 'DISPATCH_TEMPLATE_FILE' $DISPATCH_TEMPLATE_FILE $fullpath;
+}
+
+PROJECT_DIR=`append_slash $MY_PROJECTS`$PROJECT_NAME;
+echo 'Creating project directory ...';
+mkdir -p $PROJECT_DIR;
+
+HTACCESS=`append_slash $PROJECT_DIR`.htaccess;
+DISPATCH=`append_slash $PROJECT_DIR`dispatch.fcgi;
+
+pushd $PROJECT_DIR;
+
+if [ -f $HTACCESS ]; then
+    echo 'Creating a backup copy of current .htaccess';
+    bkp="htaccess_`date +%Y%m%d.%H%M%S`.backup";
+    mv $HTACCESS $bkp;
+    echo ' -> backup done as '$bkp;
+fi;
+cp `append_slash $MY_TEMPLATES`$HTACCESS_TEMPLATE_FILE .htaccess
+apply_template $HTACCESS;
+
+if [ -f $DISPATCH ]; then
+    echo 'Creating a backup copy of current .dispatch';
+    bkp="dispatch_`date +%Y%m%d.%H%M%S`.backup";
+    mv $DISPATCH $bkp;
+    echo ' -> backup done as '$bkp;
+fi;
+cp `append_slash $MY_TEMPLATES`$DISPATCH_TEMPLATE_FILE dispatch.fcgi
+apply_template $DISPATCH;
+
+if [ ! -f `append_slash $PROJECT_DIR`admin_media ]; then
+    ln -sf `append_slash $MY_PREFIX`lib/python2.5/site-packages/django/contrib/admin/media admin_media;
+fi;
+
+chmod 755 $HTACCESS $DISPATCH;
+
+echo 'All done!';
+echo '';
+echo 'Copy your "media" folder to here, or change its name in .htaccess';

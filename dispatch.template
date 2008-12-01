@@ -1,0 +1,42 @@
+#!{@MY_PYTHON@}
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2008 Gabriel Falcão <gabriel@nacaolivre.org>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the
+# Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+
+import sys, os
+
+
+REL2ABS_PATH = lambda y:os.path.join(os.path.expanduser('~'),y)
+PROJECT_PATH = os.path.join('{@PROJECTS_BASE_PATH@}', '{@PROJECT_NAME@}')
+
+# Add a custom Python path.
+sys.path.append('{@PROJECTS_BASE_PATH@}')
+sys.path.append(PROJECT_PATH)
+
+# Adding the old python path of dreamhost, there are many builtin modules
+sys.path.insert(0, "/usr/lib/python2.3/site-packages/")
+sys.path.insert(0, "/usr/lib/python2.4/site-packages/")
+
+# Changing current dir to the project path
+os.chdir(PROJECT_PATH)
+
+# Set the DJANGO_SETTINGS_MODULE environment variable.
+os.environ['DJANGO_SETTINGS_MODULE'] = "{@PROJECT_NAME@}.settings"
+
+from django.core.servers.fastcgi import runfastcgi
+runfastcgi(method="threaded", daemonize="false")
