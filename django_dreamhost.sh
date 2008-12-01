@@ -79,7 +79,7 @@ create_dirs () {
 apply_template () {
     if [ -f $1 ]; then
         fullpath=$1;
-        # echo " [template processing] Replacing file $fullpath ...";
+        echo " [template processing] Replacing file $fullpath ...";
         replace_tag 'PROJECTS_BASE_PATH' $PROJECTS_BASE_PATH $fullpath;
         replace_tag 'MY_PYTHON' $MY_PYTHON $fullpath;
         replace_tag 'MY_PROJECTS' $PROJECTS_BASE_PATH $fullpath;
