@@ -104,11 +104,12 @@ setup_scripts () {
     echo ' -> Downloading djangifier script template ...';
     wget -c --quiet $DJANGIFIER_TEMPLATE_URL;
     echo 'Transforming script templates in functional scripts ...';
-    for file in "$DISPATCH_TEMPLATE_FILE $HTACCESS_TEMPLATE_FILE $DJANGIFIER_TEMPLATE_FILE"; do
+    for file in $DISPATCH_TEMPLATE_FILE $HTACCESS_TEMPLATE_FILE $DJANGIFIER_TEMPLATE_FILE; do
         fullpath=`append_slash $MY_TEMPLATES`$file;
         apply_template $fullpath;
     done;
     djangifier_bin=`append_slash $MY_PREFIX`bin/$DJANGIFIER_TEMPLATE_NEW_FILE;
+    echo " [creating script]  $djangifier_bin ...";
     mv $DJANGIFIER_TEMPLATE_FILE $djangifier_bin;
     chmod +x $djangifier_bin;
     popd;
