@@ -15,22 +15,22 @@ The main script, django_dreamhost.sh does everything in a single shot.
 
 * Download the following tarballs:
 * Python 2.5.2
- * Django 1.0.2
- * Setuptools 0.6c9
- * FLUP 1.0.1 (Fast-CGI support)
+* Django 1.0.2
+* Setuptools 0.6c9
+* FLUP 1.0.1 (Fast-CGI support)
 
 * Create a fake-root directory in user's home: $HOME/.myroot
- * Create "etc" subdir
+* Create "etc" subdir
 * Compile and install Python under $HOME/usr as $prefix
 * Install the rest of python modules (Django, PIL, etc.)
 
 * Download install auxiliary scripts, through script-templates and replace its internal strings.
- * per project .htaccess template
- * per project Fast-CGI template
- * djangifier template
+* per project .htaccess template
+* per project Fast-CGI template
+* djangifier template
 
 * Create the default projects dir:
- * $HOME/projects
+* $HOME/projects
 
 Djangifier, the big deal!
 =========================
