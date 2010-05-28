@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (C) 2008 Gabriel Falcão <gabriel@nacaolivre.org>
+# Copyright (C) 2008-2010 Gabriel Falcão <gabriel@nacaolivre.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -65,7 +65,7 @@ echo 'Creating project directory ...';
 mkdir -p $PROJECT_DIR;
 
 HTACCESS=`append_slash $PROJECT_DIR`.htaccess;
-DISPATCH=`append_slash $PROJECT_DIR`dispatch.fcgi;
+DISPATCH=`append_slash $PROJECT_DIR`passenger_wsgi.py;
 
 pushd $PROJECT_DIR;
 
@@ -84,11 +84,11 @@ if [ -f $DISPATCH ]; then
     mv $DISPATCH $bkp;
     echo ' -> backup done as '$bkp;
 fi;
-cp `append_slash $MY_TEMPLATES`$DISPATCH_TEMPLATE_FILE dispatch.fcgi
+cp `append_slash $MY_TEMPLATES`$DISPATCH_TEMPLATE_FILE passenger_wsgi.py
 apply_template $DISPATCH;
 
 if [ ! -f `append_slash $PROJECT_DIR`admin_media ]; then
-    ln -sf `append_slash $MY_PREFIX`lib/python2.5/site-packages/django/contrib/admin/media admin_media;
+    ln -sf `append_slash $MY_PREFIX`lib/python2.6/site-packages/django/contrib/admin/media admin_media;
 fi;
 
 chmod 755 $HTACCESS $DISPATCH;

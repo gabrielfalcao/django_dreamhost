@@ -1,7 +1,7 @@
 #!{@MY_PYTHON@}
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2008 Gabriel Falcão <gabriel@nacaolivre.org>
+# Copyright (C) 2008-2010 Gabriel Falcão <gabriel@nacaolivre.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -29,8 +29,8 @@ sys.path.append('{@PROJECTS_BASE_PATH@}')
 sys.path.append(PROJECT_PATH)
 
 # Adding the old python path of dreamhost, there are many builtin modules
-sys.path.insert(0, "/usr/lib/python2.3/site-packages/")
-sys.path.insert(0, "/usr/lib/python2.4/site-packages/")
+sys.path.append("/usr/lib/python2.3/site-packages/")
+sys.path.append("/usr/lib/python2.4/site-packages/")
 
 # Changing current dir to the project path
 os.chdir(PROJECT_PATH)
@@ -38,5 +38,6 @@ os.chdir(PROJECT_PATH)
 # Set the DJANGO_SETTINGS_MODULE environment variable.
 os.environ['DJANGO_SETTINGS_MODULE'] = "{@PROJECT_NAME@}.settings"
 
-from django.core.servers.fastcgi import runfastcgi
-runfastcgi(method="threaded", daemonize="false")
+# running wsgi
+import django.core.handlers.wsgi
+application = django.core.handlers.wsgi.WSGIHandler()

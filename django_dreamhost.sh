@@ -1,7 +1,7 @@
 #!/bin/bash
 # -*- coding: utf-8; -*-
 #
-# Copyright (C) 2008 Gabriel Falcão <gabriel@nacaolivre.org>
+# Copyright (C) 2008-1020 Gabriel Falcão <gabriel@nacaolivre.org>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -51,23 +51,19 @@ DJANGIFIER_TEMPLATE_URL=`append_slash $SCRIPT_TEMPLATES_URL`$DJANGIFIER_TEMPLATE
 MY_ROOT=$HOME/.myroot
 MY_PREFIX=`append_slash $MY_ROOT`usr
 MY_ETC=`append_slash $MY_ROOT`etc
-MY_PYTHON=`append_slash $MY_PREFIX`bin/python2.5
+MY_PYTHON=`append_slash $MY_PREFIX`bin/python2.6
 
-PYTHON_SOURCE_PATH='Python-2.5.2'
+PYTHON_SOURCE_PATH='Python-2.6.5'
 PYTHON_SOURCE=$PYTHON_SOURCE_PATH'.tar.bz2'
-PYTHON_DOWNLOAD_URL='http://www.python.org/ftp/python/2.5.2/'$PYTHON_SOURCE
+PYTHON_DOWNLOAD_URL='http://www.python.org/ftp/python/2.6.5/'$PYTHON_SOURCE
 
-DJANGO_SOURCE_PATH='Django-1.0.2-final'
+DJANGO_SOURCE_PATH='Django-1.2.1'
 DJANGO_SOURCE=$DJANGO_SOURCE_PATH'.tar.gz'
-DJANGO_DOWNLOAD_URL='http://www.djangoproject.com/download/1.0.2/tarball/'
+DJANGO_DOWNLOAD_URL='http://www.djangoproject.com/download/1.2.1/tarball/'
 
-SETUPTOOLS_SOURCE_PATH='setuptools-0.6c9'
+SETUPTOOLS_SOURCE_PATH='setuptools-0.6c11'
 SETUPTOOLS_SOURCE=$SETUPTOOLS_SOURCE_PATH'.tar.gz'
-SETUPTOOLS_DOWNLOAD_URL='http://pypi.python.org/packages/source/s/setuptools/setuptools-0.6c9.tar.gz#md5=3864c01d9c719c8924c455714492295e'
-
-FLUP_SOURCE_PATH='flup-1.0.1'
-FLUP_SOURCE=$FLUP_SOURCE_PATH'.tar.gz'
-FLUP_DOWNLOAD_URL='http://pypi.python.org/packages/source/f/flup/flup-1.0.1.tar.gz#md5=414181781fb0923f884a38503e8e56da'
+SETUPTOOLS_DOWNLOAD_URL='http://pypi.python.org/packages/source/s/setuptools/setuptools-0.6c11.tar.gz'
 
 create_dirs () {
     mkdir -p $MY_PREFIX;
@@ -119,14 +115,12 @@ download_all () {
     echo 'Downloading everything ...'
     echo 'Entering on downloads folder:' $DOWNLOADS_PATH '...'
     pushd $DOWNLOADS_PATH;
-    echo 'Downloading python 2.5.2 ...'
+    echo 'Downloading python 2.6.5 ...'
     wget -c --quiet $PYTHON_DOWNLOAD_URL;
-    echo 'Downloading django 1.0.2 final ...'
+    echo 'Downloading django 1.2.1 ...'
     wget -c --quiet $DJANGO_DOWNLOAD_URL;
     echo 'Downloading setuptools 0.6c9 ...'
     wget -c --quiet $SETUPTOOLS_DOWNLOAD_URL;
-    echo 'Downloading flup (python fcgi support) ...'
-    wget -c --quiet $FLUP_DOWNLOAD_URL;
     popd;
 }
 
@@ -144,7 +138,7 @@ extract_all () {
 }
 
 install_all () {
-    echo 'Installing Python 2.5.2 ...'
+    echo 'Installing Python 2.6.5 ...'
     pushd `append_slash $DOWNLOADS_PATH`$PYTHON_SOURCE_PATH;
     ./configure --prefix=$MY_PREFIX 2>&1 >> python.log;
     make 2>&1 >> python.log;
@@ -153,7 +147,7 @@ install_all () {
     echo 'export PATH='"`append_slash $MY_PREFIX`bin"':$PATH' >> $HOME/.bash_profile
     source $HOME/.bashrc
     popd;
-    echo 'Installing django 1.0.2 final ...'
+    echo 'Installing django 1.2.1 ...'
     pushd `append_slash $DOWNLOADS_PATH`$DJANGO_SOURCE_PATH;
     sed -i 's/django[-]admin[.]py/django-admin/g' setup.py
     cp django/bin/django-admin.py django/bin/django-admin
@@ -165,13 +159,10 @@ install_all () {
     echo 'Installing setuptools 0.6c9 ...'
     pushd `append_slash $DOWNLOADS_PATH`$SETUPTOOLS_SOURCE_PATH;
     $MY_PYTHON setup.py install 2>&1 >> setuptools.log
-    popd;
-    echo 'Installing flup 1.0.1 ...'
-    pushd `append_slash $DOWNLOADS_PATH`$FLUP_SOURCE_PATH;
-    $MY_PYTHON setup.py install 2>&1 >> flup.log
+    `append_slash $MY_PREFIX`bin/easy_install pip
     popd;
     echo 'Installing PIL (python imaging library) ...'
-    `append_slash $MY_PREFIX`bin/easy_install --find-links http://www.pythonware.com/products/pil/ Imaging
+    `append_slash $MY_PREFIX`bin/pip install pil
 }
 
 if [ $0 != "-bash" ]; then
