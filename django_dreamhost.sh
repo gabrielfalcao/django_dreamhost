@@ -57,10 +57,6 @@ PYTHON_SOURCE_PATH='Python-2.6.5'
 PYTHON_SOURCE=$PYTHON_SOURCE_PATH'.tar.bz2'
 PYTHON_DOWNLOAD_URL='http://www.python.org/ftp/python/2.6.5/'$PYTHON_SOURCE
 
-DJANGO_SOURCE_PATH='Django-1.2.1'
-DJANGO_SOURCE=$DJANGO_SOURCE_PATH'.tar.gz'
-DJANGO_DOWNLOAD_URL='http://www.djangoproject.com/download/1.2.1/tarball/'
-
 SETUPTOOLS_SOURCE_PATH='setuptools-0.6c11'
 SETUPTOOLS_SOURCE=$SETUPTOOLS_SOURCE_PATH'.tar.gz'
 SETUPTOOLS_DOWNLOAD_URL='http://pypi.python.org/packages/source/s/setuptools/setuptools-0.6c11.tar.gz'
@@ -117,9 +113,7 @@ download_all () {
     pushd $DOWNLOADS_PATH;
     echo 'Downloading python 2.6.5 ...'
     wget -c --quiet $PYTHON_DOWNLOAD_URL;
-    echo 'Downloading django 1.2.1 ...'
-    wget -c --quiet $DJANGO_DOWNLOAD_URL;
-    echo 'Downloading setuptools 0.6c9 ...'
+    echo 'Downloading setuptools 0.6c11 ...'
     wget -c --quiet $SETUPTOOLS_DOWNLOAD_URL;
     popd;
 }
@@ -130,8 +124,6 @@ extract_all () {
     pushd $DOWNLOADS_PATH;
     echo 'Extracting python ...'
     tar xjf $PYTHON_SOURCE;
-    echo 'Extracting django ...'
-    tar xzf $DJANGO_SOURCE;
     echo 'Extracting setuptools ...'
     tar xzf $SETUPTOOLS_SOURCE;
     popd;
@@ -147,20 +139,13 @@ install_all () {
     echo 'export PATH='"`append_slash $MY_PREFIX`bin"':$PATH' >> $HOME/.bash_profile
     source $HOME/.bashrc
     popd;
-    echo 'Installing django 1.2.1 ...'
-    pushd `append_slash $DOWNLOADS_PATH`$DJANGO_SOURCE_PATH;
-    sed -i 's/django[-]admin[.]py/django-admin/g' setup.py
-    cp django/bin/django-admin.py django/bin/django-admin
-    cp extras/django_bash_completion `append_slash $MY_ETC`django_bash_completion
-    echo ". `append_slash $MY_ETC`django_bash_completion" >> $HOME/.bashrc
-    echo ". `append_slash $MY_ETC`django_bash_completion" >> $HOME/.bash_profile
-    $MY_PYTHON setup.py install 2>&1 >> django.log
-    popd;
-    echo 'Installing setuptools 0.6c9 ...'
+    echo 'Installing setuptools 0.6c11 ...'
     pushd `append_slash $DOWNLOADS_PATH`$SETUPTOOLS_SOURCE_PATH;
     $MY_PYTHON setup.py install 2>&1 >> setuptools.log
     `append_slash $MY_PREFIX`bin/easy_install pip
     popd;
+    echo 'Installing Django ...'
+    `append_slash $MY_PREFIX`bin/pip install django
     echo 'Installing PIL (python imaging library) ...'
     `append_slash $MY_PREFIX`bin/pip install pil
 }
