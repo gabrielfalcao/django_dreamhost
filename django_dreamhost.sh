@@ -132,7 +132,7 @@ extract_all () {
 install_all () {
     echo 'Installing Python 2.6.5 ...'
     pushd `append_slash $DOWNLOADS_PATH`$PYTHON_SOURCE_PATH;
-    ./configure --prefix=$MY_PREFIX 2>&1 >> python.log;
+    ./configure --prefix=$MY_PREFIX --enable-bz2 2>&1 >> python.log;
     make 2>&1 >> python.log;
     make install 2>&1 >> python.log;
     echo 'export PATH='"`append_slash $MY_PREFIX`bin"':$PATH' >> $HOME/.bashrc
