@@ -1,4 +1,12 @@
-# What is this about
+# nutshell
+
+access your dreamhost account through SSH and run:
+    curl http://github.com/gabrielfalcao/django_dreamhost/raw/master/django_dreamhost.sh -o - | bash
+
+afterwards you'll be able to setup new django projects with the command:
+    djangify myproj
+
+# what is this about
 
 There are many ways to set up a Python environment without root
 permissions.
@@ -10,13 +18,12 @@ This is a structure that creates a brand new python environment to
 your user, so you can put your Django projects running on Dreamhost in
 a few minutes.
 
-# How does it works
+# how does it works
 
 The main script, django_dreamhost.sh does everything in a single shot.
 
 * Download the following tarballs:
 * Python 2.6.5
-* Django 1.2.1
 * Setuptools 0.6c11
 
 * Create a fake-root directory in user's home: $HOME/.myroot
@@ -32,7 +39,7 @@ The main script, django_dreamhost.sh does everything in a single shot.
 * Create the default projects dir:
 * $HOME/projects
 
-# Djangifier, the big deal!
+# djangifier, the big deal!
 
 The big feature of this project is the djangifier, it is a script that
 setup a new Django project structure.
