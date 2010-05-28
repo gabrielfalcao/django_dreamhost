@@ -34,7 +34,7 @@ replace_tag () {
     fi;
 }
 
-SCRIPT_TEMPLATES_URL='http://gnu.gabrielfalcao.com/django_dreamhost/'
+SCRIPT_TEMPLATES_URL='http://github.com/gabrielfalcao/django_dreamhost/raw/master/'
 PROJECTS_BASE_PATH=$HOME/projects
 MY_TEMPLATES=`append_slash $PROJECTS_BASE_PATH`script_templates
 DOWNLOADS_PATH=$HOME/downloads
