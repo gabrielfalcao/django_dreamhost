@@ -132,7 +132,7 @@ extract_all () {
 install_all () {
     echo 'Installing Python 2.6.5 ...'
     pushd `append_slash $DOWNLOADS_PATH`$PYTHON_SOURCE_PATH;
-    ./configure --prefix=$MY_PREFIX --enable-bz2 2>&1 >> python.log;
+    ./configure USE="sqlite" --prefix=$MY_PREFIX --enable-bz2 2>&1 >> python.log;
     make 2>&1 >> python.log;
     make install 2>&1 >> python.log;
     echo 'export PATH='"`append_slash $MY_PREFIX`bin"':$PATH' >> $HOME/.bashrc
@@ -144,10 +144,12 @@ install_all () {
     $MY_PYTHON setup.py install 2>&1 >> setuptools.log
     `append_slash $MY_PREFIX`bin/easy_install pip
     popd;
-    echo 'Installing Django ...'
+    pushd `append_slash $DOWNLOADS_PATH`
+    echo 'Installing django ...'
     `append_slash $MY_PREFIX`bin/pip install django
     echo 'Installing PIL (python imaging library) ...'
     `append_slash $MY_PREFIX`bin/pip install pil
+    popd;
 }
 
 if [ $0 != "-bash" ]; then
